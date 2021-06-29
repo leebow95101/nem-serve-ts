@@ -7,19 +7,19 @@ import { createHash } from 'crypto'
  * @param obj 判断是否是对象
  * @return {Boolean} 返回布尔值
  */
-const isObject = (obj: any): boolean => Object.prototype.toString.call(obj) === '[Object Object]'
+const isObject = (obj: any): boolean => Object.prototype.toString.call(obj) === '[object Object]'
 
 /**
  * @param function 判断是否是函数
  * @return {Boolean} 返回布尔值
  */
-const isFunction = (obj: any): boolean => Object.prototype.toString.call(obj) === '[Object Function]'
+const isFunction = (obj: any): boolean => Object.prototype.toString.call(obj) === '[object Function]'
 
 /**
  * @param RegExp 判断是否是正则
  * @return {Boolean} 返回布尔值
  */
-const isRegExp = (obj: any): boolean => Object.prototype.toString.call(obj) === '[Object RegExp]'
+const isRegExp = (obj: any): boolean => Object.prototype.toString.call(obj) === '[object RegExp]'
 
 export default {
     isObject,
@@ -40,7 +40,13 @@ export default {
     isEmpty: (value: any): boolean => {
         if (Array.isArray(value)) return value.length === 0
 
-        if (isObject(value)) return JSON.stringify(value) === '{}'
+        if (isObject(value)) {
+            for (let k in value) {
+                if (Object.prototype.hasOwnProperty.call(value, k)) {
+                    return false;
+                }
+            }
+        }
 
         return [undefined, null, ''].includes(value)
     },
